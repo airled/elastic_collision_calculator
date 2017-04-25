@@ -14,11 +14,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-double calculateVelocityAfter1(int initialVelocity1, int initialVelocity2, int mass1, int mass2) {
+float calculateVelocityAfter1(float initialVelocity1, float initialVelocity2, float mass1, float mass2) {
     return ((mass1 - mass2) * initialVelocity1 + 2 * mass2 * initialVelocity2) / (mass1 + mass2);
 }
 
-QString checkValues(int initialVelocity1, int initialVelocity2, int mass1, int mass2) {
+QString checkValues(float initialVelocity1, float initialVelocity2, float mass1, float mass2) {
     if (initialVelocity2 >= initialVelocity1 && initialVelocity1 > 0 && initialVelocity2 > 0) {
         return "First thing is slower or has same velocity - no collision";
     }
@@ -38,15 +38,15 @@ QString checkValues(int initialVelocity1, int initialVelocity2, int mass1, int m
 
 void MainWindow::on_pushButton_clicked()
 {
-    int initialVelocity1 = ui->initVelocity1->text().toInt();
-    int initialVelocity2 = ui->initVelocity2->text().toInt();
-    int mass1 = ui->mass1->text().toInt();
-    int mass2 = ui->mass2->text().toInt();
+    float initialVelocity1 = ui->initVelocity1->text().toFloat();
+    float initialVelocity2 = ui->initVelocity2->text().toFloat();
+    float mass1 = ui->mass1->text().toFloat();
+    float mass2 = ui->mass2->text().toFloat();
 
     QString checkResult = checkValues(initialVelocity1, initialVelocity2, mass1, mass2);
     if (checkResult == "ok") {
-        double velocityAfter1 = calculateVelocityAfter1(initialVelocity1, initialVelocity2, mass1, mass2);
-        double velocityAfter2 = velocityAfter1 + initialVelocity1 - initialVelocity2;
+        float velocityAfter1 = calculateVelocityAfter1(initialVelocity1, initialVelocity2, mass1, mass2);
+        float velocityAfter2 = velocityAfter1 + initialVelocity1 - initialVelocity2;
         ui->velocityResult1->setText(QString::number(velocityAfter1));
         ui->velocityResult2->setText(QString::number(velocityAfter2));
     }
