@@ -20,11 +20,24 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    float calculateVelocityAfter1(float, float, float, float);
-    void calculateInitialMomentums(float, float, float, float);
-    void calculateFinalMomentums(float, float, float, float);
-    QString checkValues(float, float, float, float);
+    float mass1;
+    float mass2;
+    float initialVelocity1;
+    float initialVelocity2;
+    float finalVelocity1;
+    float finalVelocity2;
+    float initialMomentum1;
+    float initialMomentum2;
+    float finalMomentum1;
+    float finalMomentum2;
 
+    void getInitialValues();
+    QString checkInitialValues();
+    void calculateFinalVelocities();
+    void calculateInitialMomentums();
+    void calculateFinalMomentums();
+    void showResults();
+    void clearResults();
 };
 
 #endif // MAINWINDOW_H

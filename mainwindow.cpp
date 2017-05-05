@@ -14,12 +14,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-float MainWindow::calculateVelocityAfter1(float initialVelocity1, float initialVelocity2, float mass1, float mass2)
+void MainWindow::getInitialValues()
 {
-    return ((mass1 - mass2) * initialVelocity1 + 2 * mass2 * initialVelocity2) / (mass1 + mass2);
+    initialVelocity1 = ui->initVelocity1->text().toFloat();
+    initialVelocity2 = ui->initVelocity2->text().toFloat();
+    mass1 = ui->mass1->text().toFloat();
+    mass2 = ui->mass2->text().toFloat();
 }
 
-QString MainWindow::checkValues(float initialVelocity1, float initialVelocity2, float mass1, float mass2)
+QString MainWindow::checkInitialValues()
 {
     if (initialVelocity2 >= initialVelocity1 && initialVelocity1 > 0 && initialVelocity2 > 0) {
         return "First thing is slower or has same velocity - no collision";
@@ -38,37 +41,56 @@ QString MainWindow::checkValues(float initialVelocity1, float initialVelocity2, 
     }
 }
 
-void MainWindow::calculateInitialMomentums(float initialVelocity1, float initialVelocity2, float mass1, float mass2)
+void MainWindow::calculateFinalVelocities()
 {
-    ui->initialMomemntum1->setText(QString::number(initialVelocity1 * mass1));
-    ui->initialMomemntum2->setText(QString::number(initialVelocity2 * mass2));
+    finalVelocity1 = ((mass1 - mass2) * initialVelocity1 + 2 * mass2 * initialVelocity2) / (mass1 + mass2);
+    finalVelocity2 = finalVelocity1 + initialVelocity1 - initialVelocity2;
 }
 
-void MainWindow::calculateFinalMomentums(float velocityAfter1, float velocityAfter2, float mass1, float mass2)
+void MainWindow::calculateInitialMomentums()
 {
-    ui->finalMomentum1->setText(QString::number(velocityAfter1 * mass1));
-    ui->finalMomentum2->setText(QString::number(velocityAfter2 * mass2));
+    initialMomentum1 = initialVelocity1 * mass1;
+    initialMomentum2 = initialVelocity2 * mass2;
+}
+
+void MainWindow::calculateFinalMomentums()
+{
+    finalMomentum1 = finalVelocity1 * mass1;
+    finalMomentum2 = finalVelocity2 * mass2;
+}
+
+void MainWindow::showResults()
+{
+    ui->velocityResult1->setText(QString::number(finalVelocity1));
+    ui->velocityResult2->setText(QString::number(finalVelocity2));
+    ui->initialMomentum1->setText(QString::number(initialMomentum1));
+    ui->initialMomentum2->setText(QString::number(initialMomentum2));
+    ui->finalMomentum1->setText(QString::number(finalMomentum1));
+    ui->finalMomentum2->setText(QString::number(finalMomentum2));
+}
+
+void MainWindow::clearResults()
+{
+    ui->velocityResult1->clear();
+    ui->velocityResult2->clear();
+    ui->initialMomentum1->clear();
+    ui->initialMomentum2->clear();
+    ui->finalMomentum1->clear();
+    ui->finalMomentum2->clear();
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    float initialVelocity1 = ui->initVelocity1->text().toFloat();
-    float initialVelocity2 = ui->initVelocity2->text().toFloat();
-    float mass1 = ui->mass1->text().toFloat();
-    float mass2 = ui->mass2->text().toFloat();
-
-    QString checkResult = checkValues(initialVelocity1, initialVelocity2, mass1, mass2);
+    getInitialValues();
+    QString checkResult = checkInitialValues();
     if (checkResult == "ok") {
-        float velocityAfter1 = calculateVelocityAfter1(initialVelocity1, initialVelocity2, mass1, mass2);
-        float velocityAfter2 = velocityAfter1 + initialVelocity1 - initialVelocity2;
-        calculateInitialMomentums(initialVelocity1, initialVelocity2, mass1, mass2);
-        calculateFinalMomentums(velocityAfter1, velocityAfter2, mass1, mass2);
-        ui->velocityResult1->setText(QString::number(velocityAfter1));
-        ui->velocityResult2->setText(QString::number(velocityAfter2));
+        calculateFinalVelocities();
+        calculateInitialMomentums();
+        calculateFinalMomentums();
+        showResults();
     }
     else {
-       ui->velocityResult1->clear();
-       ui->velocityResult2->clear();
+       clearResults();
        QMessageBox::warning(this, "Warning", checkResult);
     }
 }
