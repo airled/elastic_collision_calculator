@@ -14,11 +14,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-float calculateVelocityAfter1(float initialVelocity1, float initialVelocity2, float mass1, float mass2) {
+float MainWindow::calculateVelocityAfter1(float initialVelocity1, float initialVelocity2, float mass1, float mass2)
+{
     return ((mass1 - mass2) * initialVelocity1 + 2 * mass2 * initialVelocity2) / (mass1 + mass2);
 }
 
-QString checkValues(float initialVelocity1, float initialVelocity2, float mass1, float mass2) {
+QString MainWindow::checkValues(float initialVelocity1, float initialVelocity2, float mass1, float mass2)
+{
     if (initialVelocity2 >= initialVelocity1 && initialVelocity1 > 0 && initialVelocity2 > 0) {
         return "First thing is slower or has same velocity - no collision";
     }
@@ -36,6 +38,18 @@ QString checkValues(float initialVelocity1, float initialVelocity2, float mass1,
     }
 }
 
+void MainWindow::calculateInitialMomentums(float initialVelocity1, float initialVelocity2, float mass1, float mass2)
+{
+    ui->initialMomemntum1->setText(QString::number(initialVelocity1 * mass1));
+    ui->initialMomemntum2->setText(QString::number(initialVelocity2 * mass2));
+}
+
+void MainWindow::calculateFinalMomentums(float velocityAfter1, float velocityAfter2, float mass1, float mass2)
+{
+    ui->finalMomentum1->setText(QString::number(velocityAfter1 * mass1));
+    ui->finalMomentum2->setText(QString::number(velocityAfter2 * mass2));
+}
+
 void MainWindow::on_pushButton_clicked()
 {
     float initialVelocity1 = ui->initVelocity1->text().toFloat();
@@ -47,6 +61,8 @@ void MainWindow::on_pushButton_clicked()
     if (checkResult == "ok") {
         float velocityAfter1 = calculateVelocityAfter1(initialVelocity1, initialVelocity2, mass1, mass2);
         float velocityAfter2 = velocityAfter1 + initialVelocity1 - initialVelocity2;
+        calculateInitialMomentums(initialVelocity1, initialVelocity2, mass1, mass2);
+        calculateFinalMomentums(velocityAfter1, velocityAfter2, mass1, mass2);
         ui->velocityResult1->setText(QString::number(velocityAfter1));
         ui->velocityResult2->setText(QString::number(velocityAfter2));
     }
