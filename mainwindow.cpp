@@ -1,12 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include <QPixmap>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QPixmap pic(":/img/img/pic.jpg");
+    int width = ui->pic->width();
+    int height = ui->pic->height();
+    ui->pic->setPixmap(pic.scaled(width, height, Qt::KeepAspectRatio));
 }
 
 MainWindow::~MainWindow()
